@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -14,7 +15,6 @@ import fr.arsleust.simplezipworldrestorer.Exceptions.NoSuchWorldException;
 import fr.arsleust.simplezipworldrestorer.Exceptions.SendableException;
 import fr.arsleust.simplezipworldrestorer.Util.FileUtil;
 import fr.arsleust.simplezipworldrestorer.Util.ZipFileUtil;
-import net.md_5.bungee.api.ChatColor;
 
 public class WorldRestorer implements WorldOperator {
 

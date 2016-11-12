@@ -3,6 +3,7 @@ package fr.arsleust.simplezipworldrestorer;
 import java.io.File;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.block.CommandBlock;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,7 +16,6 @@ import fr.arsleust.simplezipworldrestorer.WorldOperators.WorldOperator;
 import fr.arsleust.simplezipworldrestorer.WorldOperators.WorldRestorer;
 import fr.arsleust.simplezipworldrestorer.WorldOperators.WorldSaver;
 import fr.arsleust.simplezipworldrestorer.WorldOperators.WorldZipper;
-import net.md_5.bungee.api.ChatColor;
 
 /**
  * SimpleZIPWorldRestorer main class
