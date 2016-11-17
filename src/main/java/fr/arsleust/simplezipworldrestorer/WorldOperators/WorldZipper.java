@@ -4,19 +4,22 @@ import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 
 import fr.arsleust.simplezipworldrestorer.Plugin;
 import fr.arsleust.simplezipworldrestorer.Exceptions.NoSuchWorldException;
 import fr.arsleust.simplezipworldrestorer.Exceptions.SendableException;
+import fr.arsleust.simplezipworldrestorer.Exceptions.UsageException;
 import fr.arsleust.simplezipworldrestorer.Util.ZipFileUtil;
 
-public class WorldZipper implements WorldOperator {
+public class WorldZipper extends WorldOperator {
 	
 	private final String worldName;
-	private boolean jobDone = false;
 	
-	public WorldZipper(String worldName) {
-		this.worldName = worldName;
+	public WorldZipper(Plugin plugin, CommandSender sender, String [] args) throws UsageException {
+		super(plugin, sender, args);
+		
+		worldName = plugin.buildWorldName(sender, args, 0);
 	}
 	
 	public void execute() throws SendableException {

@@ -5,20 +5,23 @@ import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.command.CommandSender;
 
+import fr.arsleust.simplezipworldrestorer.Plugin;
 import fr.arsleust.simplezipworldrestorer.Exceptions.NoSuchWorldException;
 import fr.arsleust.simplezipworldrestorer.Exceptions.SendableException;
+import fr.arsleust.simplezipworldrestorer.Exceptions.UsageException;
 
-public class WorldLoader implements WorldOperator {
+public class WorldLoader extends WorldOperator {
+		
+	private String worldName;
 	
-	private final String worldName;
-	private boolean jobDone = false;
-	
-	public WorldLoader(String worldName) {
-		this.worldName = worldName;
+	public WorldLoader(Plugin plugin, CommandSender sender, String [] args) throws UsageException {
+		super(plugin, sender, args);
+		worldName = plugin.buildWorldName(sender, args, 0);
 	}
-	
-	public void execute() throws SendableException {
+
+	public void execute() throws SendableException, UsageException {
 		if(exists()) {
 			if(!isWorldAlreadyLoaded()) {
 				createWorld();

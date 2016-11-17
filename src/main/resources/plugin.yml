@@ -20,8 +20,8 @@ commands:
     aliases: [wz, zipworld]
     permission: simplezipworldrestorer.zip
   worldrestorer:
-    usage: /<command> world name (spaces allowed)
-    description: Restore a world from backup file
+    usage: /<command> [kick] world name (spaces allowed)
+    description: Restore a world from backup file.  Pass "kick" to kick out any players in that world.
     aliases: [wr, restoreworld]
     permission: simplezipworldrestorer.restore
 permissions:

@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.arsleust.simplezipworldrestorer.Exceptions.SendableException;
+import fr.arsleust.simplezipworldrestorer.Exceptions.UsageException;
 import fr.arsleust.simplezipworldrestorer.WorldOperators.WorldLoader;
 import fr.arsleust.simplezipworldrestorer.WorldOperators.WorldOperator;
 import fr.arsleust.simplezipworldrestorer.WorldOperators.WorldRestorer;
@@ -31,8 +32,39 @@ public class Plugin extends JavaPlugin {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		// Now depending on the command specified, we call for the correspoding world operator
+		WorldOperator worldOperator = null;
+		
+		try {
+			if (command.getName().equalsIgnoreCase("worldloader")) {
+				worldOperator = new WorldLoader(this, sender, args);
+			} else if (command.getName().equalsIgnoreCase("worldsaver")) {
+				worldOperator = new WorldSaver(this, sender, args);
+			} else if (command.getName().equalsIgnoreCase("worldzipper")) {
+				worldOperator = new WorldZipper(this, sender, args);
+			} else if (command.getName().equalsIgnoreCase("worldrestorer")) {
+				worldOperator = new WorldRestorer(this, sender, args);
+			}
+			// Check if usage is right, if not return false to show usage
+			if(worldOperator == null) {
+				return false;
+			}
+			// Execute the world operator
+			worldOperator.execute();
+			sender.sendMessage(ChatColor.GREEN + worldOperator.getResultMessage());
+		} catch (SendableException e) {
+			sender.sendMessage(ChatColor.RED + e.getMessage());
+		} catch (UsageException e) {
+			// Return false to show usage
+			return false;
+		}
+		// Return true (usage is checked earlier)
+		return true;
+	}
+	
+	public String buildWorldName(CommandSender sender, String[] args, int firstArg) throws UsageException {
 		// Get world name specified by the command sender in the arguments
-		WorldNameBuilder worldNameBuilder = new WorldNameBuilder(args);
+		WorldNameBuilder worldNameBuilder = new WorldNameBuilder(args, firstArg);
 		worldNameBuilder.buildWorldName();
 		String worldName = worldNameBuilder.getWorldName();
 		// If command sender calls for special "*this" (alias "*") try to get the world of the command sender
@@ -46,30 +78,11 @@ public class Plugin extends JavaPlugin {
 				sender.sendMessage(ChatColor.RED + "You are neither a player nor a command block ... Who are you ? (can't use *this argument)");
 			}
 		}
-		// Now depending on the command specified, we call for the correspoding world operator
-		WorldOperator worldOperator = null;
-		if (command.getName().equalsIgnoreCase("worldloader")) {
-			worldOperator = new WorldLoader(worldName);
-		} else if (command.getName().equalsIgnoreCase("worldsaver")) {
-			worldOperator = new WorldSaver(worldName);
-		} else if (command.getName().equalsIgnoreCase("worldzipper")) {
-			worldOperator = new WorldZipper(worldName);
-		} else if (command.getName().equalsIgnoreCase("worldrestorer")) {
-			worldOperator = new WorldRestorer(worldName);
-		}
-		// Check if usage is right, if not return false to show usage
-		if(worldOperator == null || worldName == null || worldName == "") {
-			return false;
-		}
-		// Try to execute the world operator
-		try {
-			worldOperator.execute();
-			sender.sendMessage(ChatColor.GREEN + worldOperator.getResultMessage());
-		} catch (SendableException e) {
-			sender.sendMessage(ChatColor.RED + e.getMessage());
-		}
-		// Return true (usage is checked earlier)
-		return true;
+		
+		if (worldName == null || worldName.isEmpty())
+			throw new UsageException("Missing world name");
+		
+		return worldName;
 	}
 	
 	public static File getBackupFolder() {

@@ -2,16 +2,20 @@ package fr.arsleust.simplezipworldrestorer.WorldOperators;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 
+import fr.arsleust.simplezipworldrestorer.Plugin;
 import fr.arsleust.simplezipworldrestorer.Exceptions.NoSuchWorldException;
+import fr.arsleust.simplezipworldrestorer.Exceptions.UsageException;
 
-public class WorldSaver implements WorldOperator {
+public class WorldSaver extends WorldOperator {
 	
 	private final String worldName;
-	private boolean jobDone = false;
 	
-	public WorldSaver(String worldName) {
-		this.worldName = worldName;
+	public WorldSaver(Plugin plugin, CommandSender sender, String [] args) throws UsageException {
+		super(plugin, sender, args);
+		
+		worldName = plugin.buildWorldName(sender, args, 0);
 	}
 	
 	public void execute() throws NoSuchWorldException {
